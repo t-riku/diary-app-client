@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --buttonColor: #00ad54;
+}
+
 body {
   background-color: #ededed;
 }

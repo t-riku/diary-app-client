@@ -1,0 +1,180 @@
+/* @import "./variables.css";
+@import "./globals.css"; */
+
+.button {
+  text-decoration: none;
+  line-height: 1;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  color: #121212;
+  border: none;
+  cursor: pointer;
+}
+
+.button__decor {
+  position: absolute;
+  inset: 0;
+  background-color: var(--clr);
+  background-color: #00ceb6;
+  transition: transform 0.3s;
+  z-index: 0;
+}
+
+.button__content {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
+.button__icon {
+  width: 48px;
+  height: 40px;
+  background-color: var(--clr);
+  background-color: #00ceb6;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  position: relative;
+  font-size: 12px;
+}
+
+.button__icon:before {
+  content: "";
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    rgb(255, 255, 255) 0%,
+    rgb(173, 254, 235) 0%,
+    rgb(0, 214, 164) 39%,
+    rgb(0, 193, 157) 54%,
+    rgb(0, 198, 181) 74%,
+    rgb(0, 148, 201) 100%
+  );
+}
+
+.button__icon > svg {
+  z-index: 1;
+}
+
+.button__text {
+  display: inline-block;
+  transition: color 0.2s;
+  padding: 2px 1.5rem 2px;
+  padding-left: 0.75rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.button:hover .button__text {
+  color: #fff;
+}
+
+.button:hover .button__decor {
+  transform: translate(0);
+}
+
+.border__grad__block {
+  background: linear-gradient(
+    135deg,
+    rgb(255, 255, 255) 0%,
+    rgb(173, 254, 235) 0%,
+    rgb(0, 214, 164) 39%,
+    rgb(0, 193, 157) 54%,
+    rgb(0, 198, 181) 74%,
+    rgb(0, 187, 255) 100%
+  );
+  border-radius: 16px;
+  padding: 4px;
+}
+
+.border__grad__content {
+  background-color: rgb(229 231 235 / 1);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+/* loading css */
+
+.loading {
+  --speed-of-animation: 0.9s;
+  --gap: 6px;
+  --first-color: #4c86f9;
+  --second-color: #49a84c;
+  --third-color: #f6bb02;
+  --fourth-color: #f6bb02;
+  --fifth-color: #2196f3;
+  display: flex;
+  gap: 6px;
+  width: 50px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+
+.loading span {
+  width: 3px;
+  height: 30px;
+  background: var(--first-color);
+  animation: scale var(--speed-of-animation) ease-in-out infinite;
+}
+
+.loading span:nth-child(2) {
+  background: var(--second-color);
+  animation-delay: -0.8s;
+}
+
+.loading span:nth-child(3) {
+  background: var(--third-color);
+  animation-delay: -0.7s;
+}
+
+.loading span:nth-child(4) {
+  background: var(--fourth-color);
+  animation-delay: -0.6s;
+}
+
+.loading span:nth-child(5) {
+  background: var(--fifth-color);
+  animation-delay: -0.5s;
+}
+
+@keyframes scale {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.05);
+  }
+
+  20% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes scale {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.05);
+  }
+
+  20% {
+    transform: scaleY(1);
+  }
+}
+
+.animate-scale {
+  animation: scale 0.9s ease-in-out infinite;
+  --animation-delay: 0s;
+  animation-delay: var(--animation-delay);
+}

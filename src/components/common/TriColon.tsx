@@ -1,16 +1,17 @@
-import { GetServerSideProps } from "next";
 import React, { useState } from "react";
-import apiClient from "../../lib/apiClient";
-import { PostType, Profile } from "../../types";
 import Modal, { Styles } from "react-modal";
 import styles from "../../styles/Timeline.module.css";
-import { GrPowerReset } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
-import { SendImageForm } from "../../components/SendImageForm";
+import { GrPowerReset } from "react-icons/gr";
+import { PostType } from "../../types";
+import { useAuth } from "../../context/auth";
+import apiClient from "../../lib/apiClient";
+import { Toaster } from "react-hot-toast";
+import { success, error } from "../../context/hotToast";
 
 type Props = {
-  profile: Profile;
-  posts: PostType[];
+  post: PostType;
+  setLatestPosts: React.Dispatch<React.SetStateAction<PostType[]>>;
 };
 
 const customStyles: Styles = {
@@ -35,86 +36,105 @@ const customStyles: Styles = {
   },
 };
 
-// SNSで頻繁にデータが更新される可能性があるためSSRで実装する
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const { userId } = context.query;
+const TriColon = (props: Props) => {
+  const { post } = props;
+  const { setLatestPosts } = props;
 
-  try {
-    const profileResponse = await apiClient.get(`/users/profile/${userId}`);
+  const { user } = useAuth();
+  // userはnullの場合はLoginしていない場合
+  const userId = user ? user.id : null;
 
-    const postsResponse = await apiClient.get(`/posts/${userId}`);
-
-    return {
-      props: {
-        profile: profileResponse.data,
-        posts: postsResponse.data,
-      },
-    };
-  } catch (err) {
-    console.log(err);
-    return {
-      notFound: true,
-    };
-  }
-};
-
-const UserProfile = ({ profile, posts }: Props) => {
+  const [isIconClick, setIsIconClick] = useState<boolean>(false);
+  const [diaryText, setDiaryText] = useState<string>(post.content);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [isEditLoading, setIsEditLoading] = useState<boolean>(false);
-  const [isResetLoading, setIsResetLoading] = useState<boolean>(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
   const [isSettingResetLoading, setIsSettingResetLoading] =
     useState<boolean>(false);
-  const [profileImageUrl, setProfileImageUrl] = useState<string>(
-    profile.profileImageUrl
-  );
-  const [username, setUsername] = useState<string>(profile.user.username);
-  const [bio, setBio] = useState<string>(profile.bio);
 
-  const handleUsernameChange = (e: {
+  const handleDiaryTextChange = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
-    setUsername(e.target.value);
-  };
-  const handleBioChange = (e: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
-    setBio(e.target.value);
+    setDiaryText(e.target.value);
   };
 
-  const handleEditProfile = async () => {
+  const handleIconClick = () => {
+    setIsIconClick(true);
+  };
+
+  const handleEditClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (diaryText.length === 0) {
+      error("テキストが見つかりません");
+      return;
+    }
+    if (diaryText === post.content) {
+      error("同じ内容です");
+      return;
+    }
+
+    e.preventDefault();
     setIsEditLoading(true);
+
     try {
-      await apiClient.post(`/users/profile/edit/${profile.userId}`, {
-        profileImageUrl,
-        username,
-        bio,
+      const editedPost = await apiClient.post(`/posts/edit/${post.id}`, {
+        content: diaryText,
       });
-      setIsEditLoading(false);
+
       setEditModalIsOpen(false);
+      setIsIconClick(false);
+      setLatestPosts((prevPosts) => {
+        const updatedPosts = prevPosts.map((post) =>
+          post.id === editedPost.data.id ? editedPost.data : post
+        );
+
+        // もし editedPost.data.id が既存のポストのIDに存在しない場合、新しいポストを先頭に追加
+        if (!prevPosts.some((post) => post.id === editedPost.data.id)) {
+          return [editedPost.data, ...updatedPosts];
+        }
+
+        return updatedPosts;
+      });
+
+      success("投稿を更新しました");
     } catch (err) {
-      console.log(err);
+      error("投稿の更新に失敗しました");
+      console.error("Error calling OPEN AI API:", err);
+    }
+
+    setIsEditLoading(false);
+  };
+
+  const handleDeleteClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const isConfirmed = window.confirm("本当に削除しますか？");
+
+    if (isConfirmed) {
+      e.preventDefault();
+      setIsDeleteLoading(true);
+      try {
+        await apiClient.post(`posts/delete/${post.id}`);
+        setLatestPosts((prevPosts) => [...prevPosts]);
+        success("投稿を削除しました");
+      } catch (err) {
+        error("投稿の削除に失敗しました");
+        console.error("Error calling OPEN AI API:", err);
+      }
+      setIsDeleteLoading(false);
+    } else {
+      return;
     }
   };
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="w-full max-w-xl mx-auto">
-        <div className="bg-white shadow-md rounded-lg p-6 mb-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <img
-                className="w-20 h-20 rounded-full mr-4"
-                alt="User Avatar"
-                src={profile.profileImageUrl}
-              />
-              <div>
-                <h2 className="text-2xl font-semibold mb-1">
-                  {profile.user.username}
-                </h2>
-                <p className="text-gray-600">{profile.bio}</p>
-              </div>
-            </div>
+  const handleSettingReset = () => {
+    setIsSettingResetLoading(true);
+    setDiaryText(post.content);
+    setIsSettingResetLoading(false);
+  };
 
+  return (
+    <div>
+      {userId === post.authorId &&
+        (isIconClick ? (
+          <div>
             <button
               onClick={() => {
                 setEditModalIsOpen(true);
@@ -124,6 +144,14 @@ const UserProfile = ({ profile, posts }: Props) => {
             >
               編集
             </button>
+            <button
+              onClick={handleDeleteClick}
+              className="bg-red-500 text-white px-3 py-2 rounded-md text-sm"
+              disabled={isDeleteLoading ? true : false}
+            >
+              {isDeleteLoading ? "削除中" : "削除"}
+            </button>
+
             <Modal
               isOpen={editModalIsOpen}
               onRequestClose={() => setEditModalIsOpen(false)}
@@ -139,40 +167,15 @@ const UserProfile = ({ profile, posts }: Props) => {
                   >
                     ×
                   </button>
-
                   <div>
                     <h1 className="text-2xl font-bold mb-4">日記の編集</h1>
-
-                    <SendImageForm />
-
-                    <label
-                      htmlFor="username"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      ユーザー名:
-                    </label>
-                    <input
-                      type="text"
-                      id="username"
-                      className="bg-gray-100 my-2 p-4 rounded-lg shadow-inner outline-none transition-all duration-300 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                      placeholder="ユーザー名を入力してください"
-                      onChange={handleUsernameChange}
-                      value={username}
-                    />
-                    <label
-                      htmlFor="bio"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      自己紹介文
-                    </label>
                     <textarea
-                      id="bio"
-                      rows={8}
+                      rows={15}
                       cols={50}
-                      className="bg-gray-100 my-2 p-4 rounded-lg shadow-inner outline-none transition-all duration-300 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                      placeholder="はじめまして！"
-                      onChange={handleBioChange}
-                      value={bio}
+                      className="bg-gray-100 my-4 p-4 rounded-lg shadow-inner outline-none transition-all duration-300 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                      placeholder="リセットボタンを押せば元の日記に戻ります"
+                      onChange={handleDiaryTextChange}
+                      value={diaryText}
                     />
                   </div>
 
@@ -180,7 +183,7 @@ const UserProfile = ({ profile, posts }: Props) => {
                     {/* 編集ボタン */}
                     <button
                       className={styles.button}
-                      onClick={handleEditProfile}
+                      onClick={handleEditClick}
                       disabled={isEditLoading ? true : false}
                     >
                       <span
@@ -213,7 +216,7 @@ const UserProfile = ({ profile, posts }: Props) => {
                           ? `${styles.button} bg-gray-500`
                           : `${styles.button} bg-blue-500`
                       } `}
-                      // onClick={handleSettingReset}
+                      onClick={handleSettingReset}
                       disabled={isSettingResetLoading ? true : false}
                     >
                       <span
@@ -243,32 +246,17 @@ const UserProfile = ({ profile, posts }: Props) => {
               </div>
             </Modal>
           </div>
-        </div>
-        {posts.map((post: PostType) => (
-          <div className="bg-white shadow-md rounded p-4 mb-4" key={post.id}>
-            <div className="mb-4">
-              <div className="flex items-center mb-2">
-                <img
-                  className="w-10 h-10 rounded-full mr-2"
-                  alt="User Avatar"
-                  src={profile.profileImageUrl}
-                />
-                <div>
-                  <h2 className="font-semibold text-md">
-                    {post.author.username}
-                  </h2>
-                  <p className="text-gray-500 text-sm">
-                    {new Date(post.createdAt).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <p className="text-gray-700">{post.content}</p>
-            </div>
-          </div>
+        ) : (
+          <button
+            onClick={handleIconClick}
+            className="px-4 py-2 rounded-md hover:bg-slate-100"
+          >
+            ...
+          </button>
         ))}
-      </div>
+      <Toaster />
     </div>
   );
 };
 
-export default UserProfile;
+export default TriColon;

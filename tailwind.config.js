@@ -12,5 +12,7 @@ module.exports = {
   theme: {
     extend: {},
   },
+  mode: "jit",
+  purge: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
   plugins: [],
 };

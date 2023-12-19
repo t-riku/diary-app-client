@@ -66,9 +66,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("auth_token");
-    delete apiClient.defaults.headers["Authorization"];
-    setUser(null);
+    const isConfirmed = window.confirm("本当にログアウトしますか？");
+    if (isConfirmed) {
+      // ログアウト処理を実行
+      localStorage.removeItem("auth_token");
+      delete apiClient.defaults.headers["Authorization"];
+      setUser(null);
+    } else {
+      // キャンセル時の処理
+      return;
+    }
   };
 
   const value = { user, login, logout };
