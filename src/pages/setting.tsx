@@ -48,7 +48,7 @@ type Props = {
   setEditModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const setting: FC<Props> = ({ setEditModalIsOpen }) => {
+const Setting: FC<Props> = ({ setEditModalIsOpen }) => {
   const [isSettingLoading, setIsSettingLoading] = useState<boolean>(false);
   const [selectedValues, setSelectedValues] = useState<SelectedValues>({
     tone: "",
@@ -388,4 +388,4 @@ const setting: FC<Props> = ({ setEditModalIsOpen }) => {
   );
 };
 
-export default setting;
+export default Setting;

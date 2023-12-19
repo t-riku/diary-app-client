@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
   }
 };
 
-const calendar = ({ posts }: Props) => {
+const Calendar = ({ posts }: Props) => {
   const days = ["日", "月", "火", "水", "木", "金", "土"];
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
@@ -186,4 +186,4 @@ const calendar = ({ posts }: Props) => {
   );
 };
 
-export default calendar;
+export default Calendar;

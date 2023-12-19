@@ -39,7 +39,7 @@ interface Message {
   text: string;
 }
 
-const createDiary = () => {
+const CreateDiary = () => {
   const [latestPosts, setLatestPosts] = useState<PostType[]>([]);
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -345,4 +345,4 @@ const createDiary = () => {
   );
 };
 
-export default createDiary;
+export default CreateDiary;
