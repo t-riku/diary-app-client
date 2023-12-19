@@ -23,7 +23,7 @@ export const SendImageForm: React.FC = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div
-        className={`border-black border-[3px] border-dotted w-[${FIELD_SIZE}px] h-[${FIELD_SIZE}px] flex items-center justify-center rounded-[12px] overflow-hidden cursor-pointer`}
+        className={`border-black border-[3px] border-dotted w-[${FIELD_SIZE}px] h-[${FIELD_SIZE}px] w-[210px] h-[210px] flex items-center justify-center rounded-[12px] overflow-hidden cursor-pointer`}
         onClick={selectFile}
         role="presentation"
       >
