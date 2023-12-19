@@ -3,7 +3,7 @@ import Post from "../components/Post";
 import { PostType } from "../types";
 import apiClient from "../lib/apiClient";
 
-const viewDiary = () => {
+const ViewDiary = () => {
   const [latestPosts, setLatestPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
@@ -30,4 +30,4 @@ const viewDiary = () => {
   );
 };
 
-export default viewDiary;
+export default ViewDiary;
