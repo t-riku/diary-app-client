@@ -167,9 +167,6 @@ const Calendar = ({ posts }: Props) => {
           {filteredContent?.length !== 0 ? (
             filteredContent?.map((content, i) => (
               <div key={i} className="mt-4 bg-white p-4 rounded-lg">
-                <span>
-                  Memo:それぞれの投稿時間とTriColonコンポーネントを置く
-                </span>
                 <p>{insertBreaks(content)}</p>
               </div>
             ))
