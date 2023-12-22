@@ -59,7 +59,7 @@ const FormLeftContent = () => {
           />
         </div>
       </div>
-      <h3 className="text-xs font-bold text-gray-600 mb-[10px] flex items-start  gap-7 my-8">
+      {/* <h3 className="text-xs font-bold text-gray-600 mb-[10px] flex items-start  gap-7 my-8">
         <div>
           <span className="text-5xl text-[#13AA53] p-1">M</span>
           (MongoDB)
@@ -78,7 +78,7 @@ const FormLeftContent = () => {
           <span className="text-5xl text-[#6DC34B] p-1">N</span>
           (Node.js)
         </div>
-      </h3>
+      </h3> */}
       <span className="text-[28px] font-bold font-mono mt-10 text-gray-700 animate-pulse">
         {formattedDiarySeveralWays}通りの設定項目がある中で
         <br />
