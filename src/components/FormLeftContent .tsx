@@ -82,7 +82,7 @@ const FormLeftContent = () => {
       <span className="text-[28px] font-bold font-mono mt-10 text-gray-700 animate-pulse">
         {formattedDiarySeveralWays}通りの設定項目がある中で
         <br />
-        真面目にも、ふざけても、自由に自分好みの日記を作ってみよう!
+        自由に自分好みの日記を作ってみよう!
       </span>
     </>
   );
