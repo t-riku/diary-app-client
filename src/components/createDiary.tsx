@@ -73,7 +73,8 @@ const CreateDiary = () => {
         { sender: "system", text: data.answer },
       ]);
     } catch (err) {
-      error("日記の作成に失敗しました。");
+      error("ログインしてください");
+      // error("日記の作成に失敗しました");
       console.error("Error calling OPEN AI API:", err);
     }
 
