@@ -11,12 +11,15 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { FaPencilAlt } from "react-icons/fa";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaRegQuestionCircle } from "react-icons/fa";
+import { useRouter } from "next/router";
+import { log } from "console";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const [activeNav, setActiveNav] = useState("/");
+  const router = useRouter();
 
-  const handleChange = () => {
+  const handleLogoutClick = () => {
     setActiveNav("/logout");
     logout();
   };
@@ -105,7 +108,7 @@ const Navbar = () => {
             </Link>
           </ul>
         </nav>
-        <nav className={classes.nav}>
+        {/* <nav className={classes.nav}>
           <Link
             href="/"
             onClick={() => setActiveNav("/home")}
@@ -139,7 +142,7 @@ const Navbar = () => {
                 <IoMdPerson />
               </Link>
               <button
-                onClick={handleChange}
+                onClick={handleLogoutClick}
                 className={activeNav === "/logout" ? classes.active : ""}
               >
                 <IoLogOut />
@@ -177,7 +180,7 @@ const Navbar = () => {
           >
             <FaRegQuestionCircle />
           </Link>
-        </nav>
+        </nav> */}
       </div>
     </header>
   );
