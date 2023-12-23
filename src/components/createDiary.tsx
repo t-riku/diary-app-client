@@ -120,6 +120,12 @@ const CreateDiary = () => {
 
     setIsResetLoading(true);
     setMessages([]);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
     setIsResetLoading(false);
   };
 
@@ -142,15 +148,15 @@ const CreateDiary = () => {
       <main className="container mx-auto py-4">
         <div className="flex flex-col items-center">
           <div className="max-w-lg w-full">
-            <div className="bg-gray-100 w-full p-4 rounded-lg">
-              <span className="text-center block font-bold text-2xl border-b-2 border-inigo-400 pb-2 mb-4">
+            <div className="bg-gray-100 w-full pt-4 pb-2 rounded-lg">
+              <span className="text-center block font-bold text-2xl border-b-2 border-inigo-400 p-2">
                 日記を作ってみよう！
               </span>
               {messages.map((message, i) => (
                 <div
                   className={`flex ${
                     message.sender === "user" ? "justify-end" : "justify-start"
-                  }  mb-2`}
+                  } mt-4 mb-2 pt-2`}
                   key={i}
                 >
                   <div
@@ -284,7 +290,7 @@ const CreateDiary = () => {
                       : `${styles.button__text} text-black`
                   }`}
                 >
-                  {isResetLoading ? "消去中" : "消去"}
+                  {isResetLoading ? "リセット中" : "リセット"}
                 </span>
               </div>
             </button>
