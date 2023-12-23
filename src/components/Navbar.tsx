@@ -36,14 +36,14 @@ const Navbar = () => {
           <ul className="flex space-x-4">
             <Link
               href="/"
-              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 text-sm "
             >
               <FaPencilAlt />
               日記作成
             </Link>
             <Link
               href="/viewDiary"
-              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 text-sm "
             >
               <MdLibraryBooks />
               日記一覧
@@ -51,7 +51,7 @@ const Navbar = () => {
             {user && (
               <Link
                 href={`/calendar/${user.id}`}
-                className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+                className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 text-sm "
               >
                 <FaRegCalendarAlt />
                 カレンダー
@@ -61,14 +61,14 @@ const Navbar = () => {
               <>
                 <Link
                   href={`/profile/${user.id}`}
-                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 text-sm "
                 >
                   <IoMdPerson />
                   プロフィール
                 </Link>
                 <button
                   onClick={logout}
-                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 text-sm "
                 >
                   <IoLogIn />
                   ログアウト
@@ -78,14 +78,14 @@ const Navbar = () => {
               <>
                 <Link
                   href="/login"
-                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 "
+                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 text-sm  "
                 >
                   <IoLogOut />
                   ログイン
                 </Link>
                 <Link
                   href="/signup"
-                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 text-sm "
                 >
                   <IoMdPersonAdd />
                   サインアップ
@@ -94,14 +94,14 @@ const Navbar = () => {
             )}
             <Link
               href="/setting"
-              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 text-sm "
             >
               <IoIosSettings />
               設定
             </Link>
             <Link
               href="/question"
-              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 text-sm "
             >
               <FaRegQuestionCircle />
               使い方
