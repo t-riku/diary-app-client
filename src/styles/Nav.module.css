@@ -17,7 +17,7 @@
 
 .nav a {
   background-color: transparent;
-  padding: 0.9rem;
+  padding: 0.7rem;
   border-radius: 50%;
   display: flex;
   color: var(--color-lignt);
@@ -38,13 +38,13 @@
 /* ============== MEDIA QUERIES (SMALL DEVICES) 携帯サイズ ================= */
 @media (max-width: 480px) {
   .nav a {
-    padding: 0.7rem;
+    padding: 0.6rem;
     font-size: 1rem;
   }
 }
 @media (max-width: 400px) {
   .nav a {
-    padding: 0.6rem;
+    padding: 0.5rem;
     font-size: 0.9rem;
   }
 }

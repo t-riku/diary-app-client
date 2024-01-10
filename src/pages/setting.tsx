@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import apiClient from "../lib/apiClient";
 import {
   topicOptions,
@@ -11,18 +11,13 @@ import {
   diaryLengthOptions,
   frequencyPenaltyOptions,
   temperatureOptions,
-  convertTone,
-  convertTextFormat,
-  convertDiaryFormat,
-  convertTopic,
-  convertEmotion,
-  convertMe,
-  convertPerson,
 } from "../context/options";
 import { FaSave } from "react-icons/fa";
 import styles from "../styles/Timeline.module.css";
 import { GrPowerReset } from "react-icons/gr";
-import { GoNumber } from "react-icons/go";
+import { Toaster } from "react-hot-toast";
+import { success, error } from "../context/hotToast";
+import { useAuth } from "../context/auth";
 
 interface SelectedValues {
   tone: string;
@@ -34,34 +29,33 @@ interface SelectedValues {
   person: string;
 }
 
-type ConvertedValues = {
-  tone?: string;
-  textFormat?: string;
-  diaryFormat?: string;
-  topic?: string;
-  emotion?: string;
-  me?: string;
-  person?: string;
-};
-
 type Props = {
   setEditModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const initialSettingData = {
+  tone: "",
+  textFormat: "",
+  diaryFormat: "",
+  topic: "",
+  emotion: "",
+  me: "",
+  person: "",
+};
+
 const Setting: FC<Props> = ({ setEditModalIsOpen }) => {
   const [isSettingLoading, setIsSettingLoading] = useState<boolean>(false);
-  const [selectedValues, setSelectedValues] = useState<SelectedValues>({
-    tone: "",
-    textFormat: "",
-    diaryFormat: "",
-    topic: "",
-    emotion: "",
-    me: "",
-    person: "",
-  });
+  const [selectedValues, setSelectedValues] =
+    useState<SelectedValues>(initialSettingData);
   const [maxToken, setMaxToken] = useState<number>(150);
   const [frequencyPenalty, setFrequencyPenalty] = useState<number>(0);
   const [temperature, setTemperature] = useState<number>(1);
+  const [isSettingResetLoading, setIsSettingResetLoading] =
+    useState<boolean>(false);
+
+  const { user } = useAuth();
+  // userはnullの場合はLoginしていない場合
+  const userId = user ? user.id : null;
 
   const handleSelectChange = (
     field: keyof SelectedValues,
@@ -76,6 +70,7 @@ const Setting: FC<Props> = ({ setEditModalIsOpen }) => {
   };
 
   const handleSettingReset = () => {
+    setIsSettingResetLoading(true);
     setSelectedValues({
       tone: "",
       textFormat: "",
@@ -88,232 +83,242 @@ const Setting: FC<Props> = ({ setEditModalIsOpen }) => {
     setMaxToken(150);
     setFrequencyPenalty(0);
     setTemperature(1);
+    setIsSettingResetLoading(false);
   };
+
+  // 空文字でないプロパティのみを抽出
+  const nonEmptyValues = Object.fromEntries(
+    Object.entries(selectedValues).filter(([key, value]) => value !== "")
+  );
 
   const handleSettingSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsSettingLoading(true);
     try {
-      // 空文字でないプロパティのみを抽出
-      const nonEmptyValues = Object.fromEntries(
-        Object.entries(selectedValues).filter(([key, value]) => value !== "")
-      );
-
-      // 各プロパティを変換
-      const convertedValues: ConvertedValues = {};
-      if (nonEmptyValues.tone) {
-        convertedValues.tone = convertTone(nonEmptyValues.tone);
-      }
-      if (nonEmptyValues.textFormat) {
-        convertedValues.textFormat = convertTextFormat(
-          nonEmptyValues.textFormat
-        );
-      }
-      if (nonEmptyValues.diaryFormat) {
-        convertedValues.diaryFormat = convertDiaryFormat(
-          nonEmptyValues.diaryFormat
-        );
-      }
-      if (nonEmptyValues.topic) {
-        convertedValues.topic = convertTopic(nonEmptyValues.topic);
-      }
-      if (nonEmptyValues.emotion) {
-        convertedValues.emotion = convertEmotion(nonEmptyValues.emotion);
-      }
-      if (nonEmptyValues.me) {
-        convertedValues.me = convertMe(nonEmptyValues.me);
-      }
-      if (nonEmptyValues.person) {
-        convertedValues.person = convertPerson(nonEmptyValues.person);
-      }
-      const contextText: string = Object.values(convertedValues)
-        .filter(Boolean)
-        .join(", ");
-
-      setEditModalIsOpen(false);
-      setIsSettingLoading(false);
-      window.alert("設定項目の保存に成功しました。");
-
-      await apiClient.post("/chat/setting", {
-        contextText,
+      await apiClient.post(`/chat/setting/save/${userId}`, {
+        ...nonEmptyValues,
         maxToken,
         frequencyPenalty,
         temperature,
       });
-    } catch (error) {
+      success("設定項目の保存に成功しました。");
+      setEditModalIsOpen(false);
       setIsSettingLoading(false);
-      console.error("設定項目の保存に失敗しました。", error);
+    } catch (err) {
+      error("設定項目の保存に失敗しました。");
+      console.error("設定項目の保存に失敗しました。", err);
+      setIsSettingLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiClient.post(`/chat/setting/get/${userId}`);
+        const setting = response.data.settings;
+        setSelectedValues((prevValues) => ({
+          ...prevValues,
+          ...setting,
+        }));
+        setMaxToken(setting.maxToken);
+        setFrequencyPenalty(setting.frequencyPenalty);
+        setTemperature(setting.temperature);
+      } catch (err) {
+        error("設定項目の取得に失敗しました。");
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    if (userId) {
+      fetchData(); // userIdが存在する場合のみfetchData関数を実行
+    } else {
+      // userIdがnullの場合は何もしない
+      return () => {};
+    }
+  }, [userId]); // userIdを依存リストに指定
 
   return (
     <div className="my-10 mx-auto w-fit">
       <h1 className="text-2xl font-bold mb-4">日記の設定</h1>
+      <div className="flex items-center justify-around gap-7 max-lg:flex-col max-lg:gap-0 max-lg:items-start">
+        <div>
+          {/* 文字数の日記選択 */}
+          <div className="mb-4">
+            <label className="text-sm font-semibold mb-2 flex items-center">
+              文字数
+            </label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => setMaxToken(Number(e.target.value))}
+              value={maxToken}
+            >
+              {diaryLengthOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <div className="">
-        {/* 文字数の日記選択 */}
-        <div className="mb-4">
-          <label className="text-sm font-semibold mb-2 flex items-center">
-            <GoNumber />
-            文字数
-          </label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => setMaxToken(Number(e.target.value))}
-            value={maxToken}
-          >
-            {diaryLengthOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+          {/* 口調の選択 */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">口調</label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => handleSelectChange("tone", e)}
+              value={selectedValues.tone}
+            >
+              {toneOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* 文字の形式の選択 */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">
+              文字の形式
+            </label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => handleSelectChange("textFormat", e)}
+              value={selectedValues.textFormat}
+            >
+              {textFormats.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* 日記の形式の選択 */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">
+              日記の形式
+            </label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => handleSelectChange("diaryFormat", e)}
+              value={selectedValues.diaryFormat}
+            >
+              {diaryFormats.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* 気分や感情の指定 */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">
+              気分・感情
+            </label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => handleSelectChange("emotion", e)}
+              value={selectedValues.emotion}
+            >
+              {emotionOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
-        {/* 口調の選択 */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2">口調</label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => handleSelectChange("tone", e)}
-            value={selectedValues.tone}
-          >
-            {toneOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+        <div>
+          {/* トピックの指定 */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">トピック</label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => handleSelectChange("topic", e)}
+              value={selectedValues.topic}
+            >
+              {topicOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* 文字の形式の選択 */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2">文字の形式</label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => handleSelectChange("textFormat", e)}
-            value={selectedValues.textFormat}
-          >
-            {textFormats.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* 自分の指定 */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">
+              自分の指定
+            </label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => handleSelectChange("me", e)}
+              value={selectedValues.me}
+            >
+              {meOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* 日記の形式の選択 */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2">日記の形式</label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => handleSelectChange("diaryFormat", e)}
-            value={selectedValues.diaryFormat}
-          >
-            {diaryFormats.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* 相手の指定 */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">
+              相手の指定
+            </label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => handleSelectChange("person", e)}
+              value={selectedValues.person}
+            >
+              {personOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* 気分や感情の指定 */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2">気分・感情</label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => handleSelectChange("emotion", e)}
-            value={selectedValues.emotion}
-          >
-            {emotionOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* frequency_penalty の選択 */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">多様性</label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => setFrequencyPenalty(Number(e.target.value))}
+              value={frequencyPenalty}
+            >
+              <option value={0}>指定なし</option>
+              {frequencyPenaltyOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* トピックの指定 */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2">トピック</label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => handleSelectChange("topic", e)}
-            value={selectedValues.topic}
-          >
-            {topicOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* 自分の指定 */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2">自分の指定</label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => handleSelectChange("me", e)}
-            value={selectedValues.me}
-          >
-            {meOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* 相手の指定 */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2">相手の指定</label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => handleSelectChange("person", e)}
-            value={selectedValues.person}
-          >
-            {personOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* frequency_penalty の選択 */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2">多様性</label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => setFrequencyPenalty(Number(e.target.value))}
-            value={frequencyPenalty}
-          >
-            <option value={0}>指定なし</option>
-            {frequencyPenaltyOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* temperature の選択 */}
-        <div className="mb-4">
-          <label className="block text-sm font-semibold mb-2">ランダム性</label>
-          <select
-            className="border rounded p-2"
-            onChange={(e) => setTemperature(Number(e.target.value))}
-            value={temperature}
-          >
-            <option value={1}>指定なし</option>
-            {temperatureOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+          {/* temperature の選択 */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2">
+              ランダム性
+            </label>
+            <select
+              className="border rounded p-2"
+              onChange={(e) => setTemperature(Number(e.target.value))}
+              value={temperature}
+            >
+              <option value={1}>指定なし</option>
+              {temperatureOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -354,16 +359,16 @@ const Setting: FC<Props> = ({ setEditModalIsOpen }) => {
         {/* 元の入力値に戻すボタン */}
         <button
           className={`${
-            isSettingLoading
+            isSettingResetLoading
               ? `${styles.button} bg-gray-500`
               : `${styles.button} bg-blue-500`
           } mt-4`}
           onClick={handleSettingReset}
-          disabled={isSettingLoading ? true : false}
+          disabled={isSettingResetLoading ? true : false}
         >
           <span
             className={`${
-              isSettingLoading
+              isSettingResetLoading
                 ? `${styles.button__decor} translate-x-0`
                 : `${styles.button__decor} transform -translate-x-full`
             }`}
@@ -374,16 +379,17 @@ const Setting: FC<Props> = ({ setEditModalIsOpen }) => {
             </div>
             <span
               className={`${
-                isSettingLoading
+                isSettingResetLoading
                   ? `${styles.button__text} text-white`
                   : `${styles.button__text} text-black`
               }`}
             >
-              {isSettingLoading ? "リセット中" : "リセット"}
+              {isSettingResetLoading ? "リセット中" : "リセット"}
             </span>
           </div>
         </button>
       </div>
+      <Toaster />
     </div>
   );
 };

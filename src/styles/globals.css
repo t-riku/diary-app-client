@@ -9,3 +9,19 @@
 body {
   background-color: #ededed;
 }
+
+.send {
+  background-color: #00ceb6;
+}
+
+.gradient__send {
+  background: linear-gradient(
+    135deg,
+    rgb(255, 255, 255) 0%,
+    rgb(173, 254, 235) 0%,
+    rgb(0, 214, 164) 39%,
+    rgb(0, 193, 157) 54%,
+    rgb(0, 198, 181) 74%,
+    rgb(0, 148, 201) 100%
+  );
+}

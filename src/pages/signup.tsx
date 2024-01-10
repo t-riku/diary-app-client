@@ -47,11 +47,11 @@ const Signup = () => {
         <title>新規登録</title>
       </Head>
       <div className="w-10/12 h-4/5 grid grid-cols-12">
-        <div className="col-span-7 flex items-center justify-center flex-col">
+        <div className="col-span-7 flex items-center justify-center flex-col max-xl:hidden">
           <FormLeftContent />
         </div>
 
-        <div className="col-span-5 flex items-center justify-center">
+        <div className="col-span-5 flex items-center justify-center max-xl:col-span-12">
           <form
             className="h-[480px] w-full p-5 bg-white rounded-xl flex flex-col justify-between shadowーmd"
             onSubmit={(e) => handleSubmit(e)}
@@ -134,7 +134,7 @@ const Signup = () => {
             <Link href="/login" className="flex items-center justify-center">
               <button
                 type="submit"
-                className="group relative flex w-2/3 justify-center rounded-md border border-transparent bg-green-600 py-3 px-4 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                className="group relative flex w-2/3 max-sm:w-full justify-center rounded-md border border-transparent bg-green-600 py-3 px-4 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <RiShieldKeyholeFill
@@ -142,7 +142,7 @@ const Signup = () => {
                     aria-hidden="true"
                   />
                 </span>
-                ログインはこちら
+                <p className="max-sm:text-xs">ログインはこちら</p>
               </button>
             </Link>
           </form>

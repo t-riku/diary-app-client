@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import apiClient from "../../lib/apiClient";
 import { PostType, Profile } from "../../types";
 import dayjs from "dayjs";
+import "dayjs/locale/ja";
 import React, { useEffect, useState } from "react";
 import { generateDate, months } from "../../utils/calendar";
 import cn from "../../utils/cn";
@@ -12,6 +13,8 @@ type Props = {
   profile: Profile;
   posts: PostType[];
 };
+
+dayjs.locale("ja");
 
 // SNSで頻繁にデータが更新される可能性があるためSSRで実装する
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
@@ -41,6 +44,9 @@ const Calendar = ({ posts }: Props) => {
   const [filteredContent, setFilteredContent] = useState<string[] | null>(null);
   const [isPostDateArray, setIsPostDateArray] = useState<string[]>([]);
 
+  const month = today.month() + 1;
+  const formattedMonth = month < 10 ? "0" + month : month;
+
   // useEffectを使用してselectedDataが変更されたときにフィルタリングを行う
   useEffect(() => {
     if (!selectDate) {
@@ -67,11 +73,11 @@ const Calendar = ({ posts }: Props) => {
     const postsArray = posts.filter(
       (post) =>
         dayjs(post.createdAt).format("YYYY-MM") ===
-        `${today.year()}-${today.month() + 1}`
+        `${today.year()}-${formattedMonth}`
     );
 
     const postsDate = postsArray.map((post) =>
-      dayjs(post.createdAt).format("DD")
+      dayjs(post.createdAt).format("YYYY-MM-DD")
     );
 
     // Setを使用して重複を削除
@@ -81,13 +87,55 @@ const Calendar = ({ posts }: Props) => {
     setIsPostDateArray(uniqueNums);
   }, [today]);
 
+  const JapaneseMonths = [
+    "1月",
+    "2月",
+    "3月",
+    "4月",
+    "5月",
+    "6月",
+    "7月",
+    "8月",
+    "9月",
+    "10月",
+    "11月",
+    "12月",
+  ];
+
+  // 英語の月名を数値に変換し、その後月の値を日本語に変換する関数
+  const convertEnglishMonthToJapanese = (englishMonth: string): string => {
+    const monthMapping: Record<string, number> = {
+      January: 1,
+      February: 2,
+      March: 3,
+      April: 4,
+      May: 5,
+      June: 6,
+      July: 7,
+      August: 8,
+      September: 9,
+      October: 10,
+      November: 11,
+      December: 12,
+    };
+
+    const numericMonth = monthMapping[englishMonth];
+
+    if (numericMonth) {
+      return JapaneseMonths[numericMonth - 1];
+    } else {
+      return "";
+    }
+  };
+
   return (
-    <div className="container mx-auto mt-16">
-      <div className="flex gap-10 sm:divide-x justify-center sm:flex-row flex-col">
+    <div className="container mx-auto mt-16 max-lg:mt-8">
+      <div className="flex gap-10 sm:divide-x justify-center sm:flex-row flex-col items-center">
         <div className="w-96 h-96">
           <div className="flex justify-between items-center">
             <h1 className="select-none font-semibold">
-              {months[today.month()]}, {today.year()}
+              {today.year()}.
+              {convertEnglishMonthToJapanese(months[today.month()])}
             </h1>
             <div className="flex gap-10 items-center ">
               <GrFormPrevious
@@ -97,12 +145,13 @@ const Calendar = ({ posts }: Props) => {
                 }}
               />
               <h1
-                className=" cursor-pointer hover:scale-105 transition-all"
+                className="cursor-pointer hover:scale-105 transition-all text-sm"
                 onClick={() => {
                   setToday(currentDate);
+                  setSelectDate(currentDate);
                 }}
               >
-                Today
+                今日
               </h1>
               <GrFormNext
                 className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
@@ -129,9 +178,8 @@ const Calendar = ({ posts }: Props) => {
             {generateDate(today.month(), today.year()).map(
               ({ date, currentMonth, today }, index) => {
                 const isPostDate = isPostDateArray.some(
-                  (postDate) => Number(postDate) === date.date()
+                  (postDate) => postDate === date.format("YYYY-MM-DD")
                 );
-
                 return (
                   <div
                     key={index}
@@ -145,14 +193,16 @@ const Calendar = ({ posts }: Props) => {
                           date.toDate().toDateString()
                           ? "bg-black text-white"
                           : "",
-                        "h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-white transition-all cursor-pointer select-none"
+                        "h-10 w-10 rounded-full grid place-content-center hover:bg-black hover:text-white transition-all cursor-pointer select-none relative"
                       )}
                       onClick={() => {
                         setSelectDate(date);
                       }}
                     >
                       {date.date()}
-                      {isPostDate && <p>⚪︎</p>}
+                      {isPostDate && (
+                        <span className="absolute top-[9px] right-2 w-1 h-1 rounded-full bg-green-500"></span>
+                      )}
                     </h1>
                   </div>
                 );
@@ -160,9 +210,9 @@ const Calendar = ({ posts }: Props) => {
             )}
           </div>
         </div>
-        <div className="h-[500px] w-96 sm:px-5 overflow-y-scroll">
+        <div className="h-96 w-96 sm:px-5 overflow-y-scroll max-lg:mt-5">
           <h1 className="font-semibold text-lg">
-            Schedule for {selectDate.toDate().toDateString()}
+            {dayjs(selectDate).format("YYYY/MM/DD(ddd)")}の日記
           </h1>
           {filteredContent?.length !== 0 ? (
             filteredContent?.map((content, i) => (

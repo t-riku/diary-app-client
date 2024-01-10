@@ -19,7 +19,7 @@ const ViewDiary = () => {
   }, []);
   return (
     <div className="min-h-screen bg-gray-100">
-      <main className="container mx-auto py-4">
+      <main className="container mx-auto py-1">
         <div className="mt-10">
           {latestPosts.map((post: PostType) => (
             <Post key={post.id} post={post} setLatestPosts={setLatestPosts} />

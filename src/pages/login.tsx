@@ -37,82 +37,16 @@ const Login = () => {
     }
   };
   return (
-    // <div
-    //   style={{ height: "88vh" }}
-    //   className="flex flex-col justify-center py-12 sm:px-6 lg:px-8"
-    // >
-    //   <Head>
-    //     <title>ログイン</title>
-    //   </Head>
-    //   <div className="sm:mx-auto sm:w-full sm:max-w-md">
-    //     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-    //       アカウントにログイン
-    //     </h2>
-    //   </div>
-    //   <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-    //     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-    //       <form onSubmit={handleSubmit}>
-    //         <div>
-    //           <label
-    //             htmlFor="email"
-    //             className="block text-sm font-medium text-gray-700"
-    //           >
-    //             メールアドレス
-    //           </label>
-    //           <input
-    //             id="email"
-    //             name="email"
-    //             type="email"
-    //             autoComplete="email"
-    //             required
-    //             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-    //             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-    //               setEmail(e.target.value)
-    //             }
-    //           />
-    //         </div>
-    //         <div className="mt-6">
-    //           <label
-    //             htmlFor="password"
-    //             className="block text-sm font-medium text-gray-700"
-    //           >
-    //             パスワード
-    //           </label>
-    //           <input
-    //             id="password"
-    //             name="password"
-    //             type="password"
-    //             autoComplete="current-password"
-    //             required
-    //             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-    //             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-    //               setPassword(e.target.value)
-    //             }
-    //           />
-    //         </div>
-    //         <div className="mt-6">
-    //           <button
-    //             type="submit"
-    //             className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-    //           >
-    //             ログイン
-    //           </button>
-    //         </div>
-    //       </form>
-    //     </div>
-    //   </div>
-    // </div>
-
     <div className="w-screen h-screen bg-cover bg-[url('https://tailwindcss.com/_next/static/media/hero@75.b2469a49.jpg')] flex items-center justify-center">
       <Head>
         <title>ログイン</title>
       </Head>
       <div className="w-10/12 h-4/5 grid grid-cols-12">
-        <div className="col-span-7 flex items-center justify-center flex-col">
+        <div className="col-span-7 flex items-center justify-center flex-col max-xl:hidden">
           <FormLeftContent />
         </div>
 
-        <div className="col-span-5 flex items-center justify-center">
+        <div className="col-span-5 flex items-center justify-center max-xl:col-span-12">
           <form
             className="h-[420px] w-full p-5 bg-white rounded-xl flex flex-col justify-between shadow-md"
             onSubmit={(e) => handleSubmit(e)}
@@ -169,7 +103,7 @@ const Login = () => {
             <Link href="/signup" className="flex items-center justify-center">
               <button
                 type="submit"
-                className="group relative flex w-2/3 justify-center rounded-md border border-transparent bg-green-600 py-3 px-4 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                className="group relative flex w-2/3 max-sm:w-full justify-center rounded-md border border-transparent bg-green-600 py-3 px-4 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
               >
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <BsFillPersonPlusFill
@@ -177,7 +111,7 @@ const Login = () => {
                     aria-hidden="true"
                   />
                 </span>
-                アカウント作成はこちら
+                <p className="max-sm:text-xs">アカウント作成はこちら</p>
               </button>
             </Link>
           </form>

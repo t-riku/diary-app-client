@@ -9,8 +9,10 @@ import { IoMdPersonAdd } from "react-icons/io";
 import { FaPencilAlt } from "react-icons/fa";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaRegQuestionCircle } from "react-icons/fa";
+import createDiaryImg01 from "../../public/assets/question/createDiary/01.png";
 
 import "react-tabs/style/react-tabs.css";
+import Step from "../components/common/Step";
 
 const question = () => {
   return (
@@ -27,7 +29,7 @@ const question = () => {
               </div>
             </div>
 
-            <Tabs className="bg-white">
+            <Tabs className="bg-white rounded-md">
               <TabList className="flex flex-col sm:flex-row">
                 <Tab className="text-gray-600 py-4 px-6  hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500 flex items-center gap-1">
                   <FaPencilAlt />
@@ -51,8 +53,20 @@ const question = () => {
                 </Tab>
               </TabList>
 
-              <TabPanel>
+              <TabPanel className="container p-10">
                 <h1>日記作成の使い方です</h1>
+                <Step
+                  stepNumber={1}
+                  stepText="テキスト"
+                  imageUrl={createDiaryImg01}
+                />
+
+                {/* Use Steps component for Step 02 */}
+                <Step
+                  stepNumber={2}
+                  stepText="新しいステップの内容"
+                  imageUrl={createDiaryImg01}
+                />
               </TabPanel>
               <TabPanel>
                 <h1>日記一覧の使い方です</h1>

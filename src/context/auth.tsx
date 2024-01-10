@@ -1,5 +1,6 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import apiClient from "../lib/apiClient";
+import { useRouter } from "next/router";
 
 interface AuthContextType {
   user: null | {
@@ -33,6 +34,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     email: string;
     username: string;
   }>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("auth_token");
@@ -72,6 +75,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       localStorage.removeItem("auth_token");
       delete apiClient.defaults.headers["Authorization"];
       setUser(null);
+      router.push("/login");
     } else {
       // キャンセル時の処理
       return;

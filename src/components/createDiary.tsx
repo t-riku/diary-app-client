@@ -11,6 +11,8 @@ import Setting from "./Setting";
 import { insertBreaks } from "../components/common/insertBreaks";
 import { Toaster } from "react-hot-toast";
 import { success, error } from "../context/hotToast";
+import { useAuth } from "../context/auth";
+import Button from "./common/Button";
 
 const customStyles: Styles = {
   overlay: {
@@ -27,7 +29,7 @@ const customStyles: Styles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    minWidth: "50%",
+    minWidth: "55%",
     maxHeight: "80%",
     borderRadius: "0.5rem",
     padding: "1.5rem",
@@ -49,6 +51,10 @@ const CreateDiary = () => {
   const [isResetLoading, setIsResetLoading] = useState<boolean>(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
+  const { user } = useAuth();
+  // userはnullの場合はLoginしていない場合
+  const userId = user ? user.id : null;
+
   const handleQuestionChange = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
@@ -65,7 +71,9 @@ const CreateDiary = () => {
     setIsMessageLoading(true);
 
     try {
-      const { data } = await apiClient.post("/chat/content", { message }); // 質問をサーバーに送信
+      const { data } = await apiClient.post(`/chat/content/${userId}`, {
+        message,
+      }); // 質問をサーバーに送信
 
       setMessages((prevMessages): any => [
         ...prevMessages,
@@ -202,37 +210,67 @@ const CreateDiary = () => {
                 placeholder="日記を作成しましょう！（嬉しかったことや、特別な日のこと、人生の目標への思いなど、様々なことを文章にしましょう。）"
                 value={message}
               />
-              <button
-                className={`${
-                  isMessageLoading
-                    ? `${styles.button} bg-gray-500`
-                    : `${styles.button} bg-blue-500`
-                }`}
-                onClick={handleAnswerSubmit}
-                disabled={isMessageLoading ? true : false}
-              >
-                <span
+
+              <div className="flex flex-col">
+                <button
                   className={`${
                     isMessageLoading
-                      ? `${styles.button__decor} translate-x-0`
-                      : `${styles.button__decor} transform -translate-x-full`
-                  }`}
-                ></span>
-                <div className={styles.button__content}>
-                  <div className={styles.button__icon}>
-                    <FaPencilAlt />
-                  </div>
+                      ? `${styles.button} bg-gray-500`
+                      : `${styles.button} bg-blue-500`
+                  } mb-2`}
+                  onClick={handleAnswerSubmit}
+                  disabled={isMessageLoading ? true : false}
+                >
                   <span
                     className={`${
                       isMessageLoading
-                        ? `${styles.button__text} text-white`
-                        : `${styles.button__text} text-black`
+                        ? `${styles.button__decor} translate-x-0`
+                        : `${styles.button__decor} transform -translate-x-full`
                     }`}
-                  >
-                    {isMessageLoading ? "作成中" : "作成"}
-                  </span>
-                </div>
-              </button>
+                  ></span>
+                  <div className={styles.button__content}>
+                    <div className={styles.button__icon}>
+                      <FaPencilAlt />
+                    </div>
+                    <span
+                      className={`${
+                        isMessageLoading
+                          ? `${styles.button__text} text-white`
+                          : `${styles.button__text} text-black`
+                      }`}
+                    >
+                      {isMessageLoading ? "作成中" : "作成"}
+                    </span>
+                  </div>
+                </button>
+                <button
+                  className={styles.button}
+                  onClick={handleReset}
+                  disabled={isResetLoading ? true : false}
+                >
+                  <span
+                    className={`${
+                      isResetLoading
+                        ? `${styles.button__decor} translate-x-0`
+                        : `${styles.button__decor} transform -translate-x-full`
+                    }`}
+                  ></span>
+                  <div className={styles.button__content}>
+                    <div className={styles.button__icon}>
+                      <MdDelete />
+                    </div>
+                    <span
+                      className={`${
+                        isResetLoading
+                          ? `${styles.button__text} text-white`
+                          : `${styles.button__text} text-black`
+                      }`}
+                    >
+                      {isResetLoading ? "リセット中" : "リセット"}
+                    </span>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
           <div className="flex items-center justify-around gap-4 mt-3">
@@ -268,39 +306,18 @@ const CreateDiary = () => {
               </div>
             </button>
 
-            <button
-              className={styles.button}
-              onClick={handleReset}
-              disabled={isResetLoading ? true : false}
-            >
-              <span
-                className={`${
-                  isResetLoading
-                    ? `${styles.button__decor} translate-x-0`
-                    : `${styles.button__decor} transform -translate-x-full`
-                }`}
-              ></span>
-              <div className={styles.button__content}>
-                <div className={styles.button__icon}>
-                  <MdDelete />
-                </div>
-                <span
-                  className={`${
-                    isResetLoading
-                      ? `${styles.button__text} text-white`
-                      : `${styles.button__text} text-black`
-                  }`}
-                >
-                  {isResetLoading ? "リセット中" : "リセット"}
-                </span>
-              </div>
-            </button>
+            {/* <Button
+              onClick={handleDiarySubmit}
+              loading={false}
+              text="送信"
+              type="send"
+            /> */}
 
             <button
               onClick={() => {
                 setEditModalIsOpen(true);
               }}
-              className="flex justify-center items-center gap-2 w-20 h-12 cursor-pointer rounded-md shadow-2xl text-white font-semibold bg-gradient-to-r from-[#14b8a6] via-[#059669] to-[#047857] hover:shadow-md hover:shadow-green-500  duration-300 hover:from-[#047857] hover:to-[#14b8a6]"
+              className="flex justify-center items-center gap-2 w-20 h-12 ml-3 cursor-pointer rounded-md shadow-2xl text-white font-semibold bg-gradient-to-r from-[#14b8a6] via-[#059669] to-[#047857] hover:shadow-md hover:shadow-green-500  duration-300 hover:from-[#047857] hover:to-[#14b8a6]"
             >
               <IoIosSettings fontSize={25} />
             </button>

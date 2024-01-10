@@ -65,7 +65,7 @@ export const SendImageForm: React.FC = () => {
           </span>
         </button>
 
-        <button type="submit">画像を送信</button>
+        {/* <button type="submit">画像を送信</button> */}
       </div>
     </form>
   );

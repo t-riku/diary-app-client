@@ -107,7 +107,7 @@ const UserProfile = ({ profile, posts }: Props) => {
                 alt="User Avatar"
                 src={profile.profileImageUrl}
               />
-              <div>
+              <div className="mt-2">
                 <h2 className="text-2xl font-semibold mb-1">
                   {profile.user.username}
                 </h2>
@@ -141,7 +141,9 @@ const UserProfile = ({ profile, posts }: Props) => {
                   </button>
 
                   <div>
-                    <h1 className="text-2xl font-bold mb-4">日記の編集</h1>
+                    <h1 className="text-2xl font-bold mb-4">
+                      プロフィールの編集
+                    </h1>
 
                     <SendImageForm />
 
