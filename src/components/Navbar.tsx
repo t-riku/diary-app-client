@@ -12,6 +12,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import apiClient from "../lib/apiClient";
 import Image from "next/image";
+import ToolTip from "./common/ToopTip";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -43,6 +44,7 @@ const Navbar = () => {
 
   return (
     <>
+      {/* トップナビゲーション */}
       <header className="bg-gray-700 bg-gradient-to-br from-teal-600  via-teal-700 to-teal-800 p-4 text-white max-lg:hidden">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="font-semibold text-xl">
@@ -129,36 +131,49 @@ const Navbar = () => {
         </div>
       </header>
 
+      {/* ボトムナビゲーション */}
       <nav className={`lg:hidden ${classes.nav}`}>
         <Link
           href="/"
           onClick={() => setActiveNav("/home")}
-          className={activeNav === "/home" ? classes.active : ""}
+          className={`${
+            activeNav === "/home" ? classes.active : ""
+          } group relative`}
         >
           <FaPencilAlt />
+          <ToolTip text="日記作成" />
         </Link>
         <Link
           href="/viewDiary"
           onClick={() => setActiveNav("/viewDiary")}
-          className={activeNav === "/viewDiary" ? classes.active : ""}
+          className={`${
+            activeNav === "/viewDiary" ? classes.active : ""
+          } group relative`}
         >
           <MdLibraryBooks />
+          <ToolTip text="日記一覧" />
         </Link>
         {user ? (
           <>
             <Link
               href={`/calendar/${userId}`}
               onClick={() => setActiveNav("/calendar")}
-              className={activeNav === "/calendar" ? classes.active : ""}
+              className={`${
+                activeNav === "/calendar" ? classes.active : ""
+              } group relative`}
             >
               <FaRegCalendarAlt />
+              <ToolTip text="カレンダー" />
             </Link>
             <a>
               <button
                 onClick={handleLogoutClick}
-                className={activeNav === "/logout" ? classes.active : ""}
+                className={`${
+                  activeNav === "/logout" ? classes.active : ""
+                } group relative`}
               >
                 <IoLogOut />
+                <ToolTip text="ログアウト" />
               </button>
             </a>
           </>
@@ -167,38 +182,52 @@ const Navbar = () => {
             <Link
               href="/login"
               onClick={() => setActiveNav("/login")}
-              className={activeNav === "/login" ? classes.active : ""}
+              className={`${
+                activeNav === "/login" ? classes.active : ""
+              } group relative`}
             >
               <IoLogIn />
+              <ToolTip text="ログイン" />
             </Link>
             <Link
               href="/signup"
               onClick={() => setActiveNav("/signup")}
-              className={activeNav === "/signup" ? classes.active : ""}
+              className={`${
+                activeNav === "/signup" ? classes.active : ""
+              } group relative`}
             >
               <IoMdPersonAdd />
+              <ToolTip text="サインアップ" />
             </Link>
           </>
         )}
         <Link
           href="/setting"
           onClick={() => setActiveNav("/setting")}
-          className={activeNav === "/setting" ? classes.active : ""}
+          className={`${
+            activeNav === "/setting" ? classes.active : ""
+          } group relative`}
         >
           <IoIosSettings />
+          <ToolTip text="設定" />
         </Link>
         <Link
           href="/question"
           onClick={() => setActiveNav("/question")}
-          className={activeNav === "/question" ? classes.active : ""}
+          className={`${
+            activeNav === "/question" ? classes.active : ""
+          } group relative`}
         >
           <FaRegQuestionCircle />
+          <ToolTip text="使い方" />
         </Link>
         {user && profileImageUrl && (
           <Link
             href={`/profile/${user.id}`}
             onClick={() => setActiveNav("/profile")}
-            className={activeNav === "/profile" ? classes.active : ""}
+            className={`${
+              activeNav === "/profile" ? classes.active : ""
+            } group relative`}
           >
             <Image
               src={profileImageUrl}
@@ -207,6 +236,7 @@ const Navbar = () => {
               width={17}
               height={17}
             />
+            <ToolTip text="プロフィール" />
           </Link>
         )}
       </nav>
