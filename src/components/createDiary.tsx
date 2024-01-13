@@ -301,7 +301,7 @@ const CreateDiary = () => {
                       : `${styles.button__text} text-black`
                   }`}
                 >
-                  {isDiaryLoading ? "送信中" : "送信"}
+                  {isDiaryLoading ? "保存中" : "保存"}
                 </span>
               </div>
             </button>

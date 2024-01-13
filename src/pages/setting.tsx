@@ -156,277 +156,272 @@ const Setting = () => {
                 </Tab>
               </TabList>
 
-              <TabPanel className="container p-10">
-                <h1 className="text-2xl font-bold mb-4">ユーザーの設定</h1>
-                <div className="flex justify-between items-center">
-                  <p>日記を公開する</p>
-                  <div>
-                    <label className={styles.switch}>
-                      <input type="checkbox"></input>
-                      <span className={styles.slider}></span>
-                    </label>
+              <TabPanel>
+                <div className="p-10">
+                  <h1 className="text-2xl font-bold mb-4">ユーザーの設定</h1>
+                  <div className="flex justify-between items-center">
+                    <p>日記を公開する</p>
+                    <div>
+                      <label className={styles.switch}>
+                        <input type="checkbox"></input>
+                        <span className={styles.slider}></span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </TabPanel>
 
-              <TabPanel className="container p-10">
-                <h1 className="text-2xl font-bold mb-4">日記の設定</h1>
-                <div className="flex items-center justify-around gap-7 max-lg:flex-col max-lg:gap-0 max-lg:items-start">
-                  <div>
-                    {/* 文字数の日記選択 */}
-                    <div className="mb-4">
-                      <label className="text-sm font-semibold mb-2 flex items-center">
-                        文字数
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) => setMaxToken(Number(e.target.value))}
-                        value={maxToken}
-                      >
-                        {diaryLengthOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
+              <TabPanel>
+                <div className="p-10">
+                  <h1 className="text-2xl font-bold mb-6">日記の設定</h1>
+                  <div className="flex items-center gap-20 max-lg:flex-col max-lg:gap-0 max-lg:items-start">
+                    <div>
+                      {/* 文字数の日記選択 */}
+                      <div className="mb-4">
+                        <label className="text-sm font-semibold mb-2 flex items-center">
+                          文字数
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) => setMaxToken(Number(e.target.value))}
+                          value={maxToken}
+                        >
+                          {diaryLengthOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {/* 口調の選択 */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-semibold mb-2">
+                          口調
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) => handleSelectChange("tone", e)}
+                          value={selectedValues.tone}
+                        >
+                          {toneOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {/* 文字の形式の選択 */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-semibold mb-2">
+                          文字の形式
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) => handleSelectChange("textFormat", e)}
+                          value={selectedValues.textFormat}
+                        >
+                          {textFormats.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {/* 日記の形式の選択 */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-semibold mb-2">
+                          日記の形式
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) => handleSelectChange("diaryFormat", e)}
+                          value={selectedValues.diaryFormat}
+                        >
+                          {diaryFormats.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {/* 気分や感情の指定 */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-semibold mb-2">
+                          気分・感情
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) => handleSelectChange("emotion", e)}
+                          value={selectedValues.emotion}
+                        >
+                          {emotionOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
-
-                    {/* 口調の選択 */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold mb-2">
-                        口調
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) => handleSelectChange("tone", e)}
-                        value={selectedValues.tone}
-                      >
-                        {toneOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* 文字の形式の選択 */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold mb-2">
-                        文字の形式
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) => handleSelectChange("textFormat", e)}
-                        value={selectedValues.textFormat}
-                      >
-                        {textFormats.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* 日記の形式の選択 */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold mb-2">
-                        日記の形式
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) => handleSelectChange("diaryFormat", e)}
-                        value={selectedValues.diaryFormat}
-                      >
-                        {diaryFormats.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* 気分や感情の指定 */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold mb-2">
-                        気分・感情
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) => handleSelectChange("emotion", e)}
-                        value={selectedValues.emotion}
-                      >
-                        {emotionOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    {/* トピックの指定 */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold mb-2">
-                        トピック
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) => handleSelectChange("topic", e)}
-                        value={selectedValues.topic}
-                      >
-                        {topicOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* 自分の指定 */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold mb-2">
-                        自分の指定
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) => handleSelectChange("me", e)}
-                        value={selectedValues.me}
-                      >
-                        {meOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* 相手の指定 */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold mb-2">
-                        相手の指定
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) => handleSelectChange("person", e)}
-                        value={selectedValues.person}
-                      >
-                        {personOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* frequency_penalty の選択 */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold mb-2">
-                        多様性
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) =>
-                          setFrequencyPenalty(Number(e.target.value))
-                        }
-                        value={frequencyPenalty}
-                      >
-                        <option value={0}>指定なし</option>
-                        {frequencyPenaltyOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* temperature の選択 */}
-                    <div className="mb-4">
-                      <label className="block text-sm font-semibold mb-2">
-                        ランダム性
-                      </label>
-                      <select
-                        className="border rounded p-2"
-                        onChange={(e) => setTemperature(Number(e.target.value))}
-                        value={temperature}
-                      >
-                        <option value={1}>指定なし</option>
-                        {temperatureOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
+                    <div>
+                      {/* トピックの指定 */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-semibold mb-2">
+                          トピック
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) => handleSelectChange("topic", e)}
+                          value={selectedValues.topic}
+                        >
+                          {topicOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {/* 自分の指定 */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-semibold mb-2">
+                          自分の指定
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) => handleSelectChange("me", e)}
+                          value={selectedValues.me}
+                        >
+                          {meOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {/* 相手の指定 */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-semibold mb-2">
+                          相手の指定
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) => handleSelectChange("person", e)}
+                          value={selectedValues.person}
+                        >
+                          {personOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {/* frequency_penalty の選択 */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-semibold mb-2">
+                          多様性
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) =>
+                            setFrequencyPenalty(Number(e.target.value))
+                          }
+                          value={frequencyPenalty}
+                        >
+                          <option value={0}>指定なし</option>
+                          {frequencyPenaltyOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {/* temperature の選択 */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-semibold mb-2">
+                          ランダム性
+                        </label>
+                        <select
+                          className="border rounded p-2"
+                          onChange={(e) =>
+                            setTemperature(Number(e.target.value))
+                          }
+                          value={temperature}
+                        >
+                          <option value={1}>指定なし</option>
+                          {temperatureOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  {/* 保存ボタン */}
-                  <button
-                    className={`${
-                      isSettingLoading
-                        ? `${styles.button} bg-gray-500`
-                        : `${styles.button} bg-blue-500`
-                    } mt-4`}
-                    onClick={(e) => handleSettingSave(e)}
-                    disabled={isSettingLoading ? true : false}
-                  >
-                    <span
+                  <div className="flex items-center gap-5">
+                    {/* 保存ボタン */}
+                    <button
                       className={`${
                         isSettingLoading
-                          ? `${styles.button__decor} translate-x-0`
-                          : `${styles.button__decor} transform -translate-x-full`
-                      }`}
-                    ></span>
-                    <div className={styles.button__content}>
-                      <div className={styles.button__icon}>
-                        <FaSave />
-                      </div>
+                          ? `${styles.button} bg-gray-500`
+                          : `${styles.button} bg-blue-500`
+                      } mt-4`}
+                      onClick={(e) => handleSettingSave(e)}
+                      disabled={isSettingLoading ? true : false}
+                    >
                       <span
                         className={`${
                           isSettingLoading
-                            ? `${styles.button__text} text-white`
-                            : `${styles.button__text} text-black`
+                            ? `${styles.button__decor} translate-x-0`
+                            : `${styles.button__decor} transform -translate-x-full`
                         }`}
-                      >
-                        {isSettingLoading ? "保存中" : "保存"}
-                      </span>
-                    </div>
-                  </button>
-
-                  {/* 元の入力値に戻すボタン */}
-                  <button
-                    className={`${
-                      isSettingResetLoading
-                        ? `${styles.button} bg-gray-500`
-                        : `${styles.button} bg-blue-500`
-                    } mt-4`}
-                    onClick={handleSettingReset}
-                    disabled={isSettingResetLoading ? true : false}
-                  >
-                    <span
+                      ></span>
+                      <div className={styles.button__content}>
+                        <div className={styles.button__icon}>
+                          <FaSave />
+                        </div>
+                        <span
+                          className={`${
+                            isSettingLoading
+                              ? `${styles.button__text} text-white`
+                              : `${styles.button__text} text-black`
+                          }`}
+                        >
+                          {isSettingLoading ? "保存中" : "保存"}
+                        </span>
+                      </div>
+                    </button>
+                    {/* 元の入力値に戻すボタン */}
+                    <button
                       className={`${
                         isSettingResetLoading
-                          ? `${styles.button__decor} translate-x-0`
-                          : `${styles.button__decor} transform -translate-x-full`
-                      }`}
-                    ></span>
-                    <div className={styles.button__content}>
-                      <div className={styles.button__icon}>
-                        <GrPowerReset />
-                      </div>
+                          ? `${styles.button} bg-gray-500`
+                          : `${styles.button} bg-blue-500`
+                      } mt-4`}
+                      onClick={handleSettingReset}
+                      disabled={isSettingResetLoading ? true : false}
+                    >
                       <span
                         className={`${
                           isSettingResetLoading
-                            ? `${styles.button__text} text-white`
-                            : `${styles.button__text} text-black`
+                            ? `${styles.button__decor} translate-x-0`
+                            : `${styles.button__decor} transform -translate-x-full`
                         }`}
-                      >
-                        {isSettingResetLoading ? "リセット中" : "リセット"}
-                      </span>
-                    </div>
-                  </button>
+                      ></span>
+                      <div className={styles.button__content}>
+                        <div className={styles.button__icon}>
+                          <GrPowerReset />
+                        </div>
+                        <span
+                          className={`${
+                            isSettingResetLoading
+                              ? `${styles.button__text} text-white`
+                              : `${styles.button__text} text-black`
+                          }`}
+                        >
+                          {isSettingResetLoading ? "リセット中" : "リセット"}
+                        </span>
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </TabPanel>
             </Tabs>
