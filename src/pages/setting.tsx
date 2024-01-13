@@ -40,7 +40,7 @@ const initialSettingData = {
   person: "",
 };
 
-const setting = () => {
+const Setting = () => {
   const [isSettingLoading, setIsSettingLoading] = useState<boolean>(false);
   const [selectedValues, setSelectedValues] =
     useState<SelectedValues>(initialSettingData);
@@ -438,4 +438,4 @@ const setting = () => {
   );
 };
 
-export default setting;
+export default Setting;
