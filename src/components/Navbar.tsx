@@ -12,7 +12,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import apiClient from "../lib/apiClient";
 import Image from "next/image";
-import ToolTip from "./common/ToopTip";
+import ToolTip from "./common/ToolTip";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
