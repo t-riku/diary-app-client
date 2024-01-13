@@ -104,9 +104,9 @@ const Setting: FC<Props> = ({ setEditModalIsOpen }) => {
       success("設定項目の保存に成功しました。");
       setEditModalIsOpen(false);
       setIsSettingLoading(false);
-    } catch (err) {
-      error("設定項目の保存に失敗しました。");
+    } catch (err: any) {
       console.error("設定項目の保存に失敗しました。", err);
+      error("ログインしないと設定は完了されません");
       setIsSettingLoading(false);
     }
   };
@@ -123,9 +123,17 @@ const Setting: FC<Props> = ({ setEditModalIsOpen }) => {
         setMaxToken(setting.maxToken);
         setFrequencyPenalty(setting.frequencyPenalty);
         setTemperature(setting.temperature);
-      } catch (err) {
-        error("設定項目の取得に失敗しました。");
-        console.error("Error fetching data:", err);
+      } catch (err: any) {
+        console.error("設定項目の取得に失敗しました。", err);
+        if (err.response.data.loginMsg) {
+          error(err.response.data.loginMsg);
+        } else if (err.response.data.noSettingMsg) {
+          error(err.response.data.noSettingMsg);
+        } else if (err.response.data.serverErrorMsg) {
+          error(err.response.data.serverErrorMsg);
+        } else {
+          error("設定項目の取得に失敗しました。");
+        }
       }
     };
 

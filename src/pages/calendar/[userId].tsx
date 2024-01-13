@@ -8,6 +8,8 @@ import { generateDate, months } from "../../utils/calendar";
 import cn from "../../utils/cn";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { insertBreaks } from "../../components/common/insertBreaks";
+import Link from "next/link";
+import { FaPencilAlt } from "react-icons/fa";
 
 type Props = {
   profile: Profile;
@@ -222,9 +224,20 @@ const Calendar = ({ posts }: Props) => {
             ))
           ) : (
             <div>
-              <p className="text-gray-400">
-                No diary for {dayjs(selectDate).format("YYYY-MM-DD")}.
+              <p className="text-gray-400 pb-4">
+                No diary for {dayjs(selectDate).format("YYYY/MM/DD")}.
               </p>
+
+              {dayjs(selectDate).format("YYYY/MM/DD") ===
+                dayjs(currentDate).format("YYYY/MM/DD") && (
+                <Link
+                  href="/"
+                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-2 w-fit hover:bg-gray-100 transition-all cursor-pointer"
+                >
+                  <FaPencilAlt />
+                  <p className="text-sm">今日の日記を作成</p>
+                </Link>
+              )}
             </div>
           )}
         </div>

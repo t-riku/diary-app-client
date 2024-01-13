@@ -50,17 +50,17 @@ const Navbar = () => {
               DiaryEase+
             </Link>
           </h1>
-          <nav className="flex space-x-4 text-xs">
+          <nav className="flex space-x-4 text-xs transition-all">
             <Link
               href="/"
-              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 hover:bg-gray-200"
             >
               <FaPencilAlt />
               <p className="max-lg:hidden">日記作成</p>
             </Link>
             <Link
               href="/viewDiary"
-              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 hover:bg-gray-200"
             >
               <MdLibraryBooks />
               <p className="max-lg:hidden">日記一覧</p>
@@ -69,14 +69,14 @@ const Navbar = () => {
               <>
                 <Link
                   href={`/calendar/${userId}`}
-                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 hover:bg-gray-200"
                 >
                   <FaRegCalendarAlt />
                   <p className="max-lg:hidden">カレンダー</p>
                 </Link>
                 <button
                   onClick={logout}
-                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 hover:bg-gray-200"
                 >
                   <IoLogIn />
                   <p className="max-lg:hidden">ログアウト</p>
@@ -86,14 +86,14 @@ const Navbar = () => {
               <>
                 <Link
                   href="/login"
-                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 "
+                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 hover:bg-gray-200"
                 >
                   <IoLogOut />
                   <p className="max-lg:hidden">ログイン</p>
                 </Link>
                 <Link
                   href="/signup"
-                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+                  className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 hover:bg-gray-200"
                 >
                   <IoMdPersonAdd />
                   <p className="max-lg:hidden">サインアップ</p>
@@ -102,14 +102,14 @@ const Navbar = () => {
             )}
             <Link
               href="/setting"
-              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 hover:bg-gray-200"
             >
               <IoIosSettings />
               <p className="max-lg:hidden">設定</p>
             </Link>
             <Link
               href="/question"
-              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1"
+              className="bg-white text-gray-900 py-2 px-3 rounded-lg font-medium flex items-center gap-1 hover:bg-gray-200"
             >
               <FaRegQuestionCircle />
               <p className="max-lg:hidden">使い方</p>

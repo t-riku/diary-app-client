@@ -92,7 +92,7 @@ const CreateDiary = () => {
 
   const handleDiarySubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     if (messages.length === 0) {
-      error("まずはテキストを入力して日記を作成してもらいましょう！");
+      error("テキストを入力して、送信ボタンを押してください");
       return;
     }
 

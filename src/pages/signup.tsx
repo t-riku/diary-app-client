@@ -6,21 +6,34 @@ import Link from "next/link";
 import { RiShieldKeyholeFill } from "react-icons/ri";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import FormLeftContent from "../components/FormLeftContent ";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { error } from "../context/hotToast";
+import { Toaster } from "react-hot-toast";
 
 const Signup = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmationPassword, setShowConfirmationPassword] =
+    useState<boolean>(false);
 
   const router = useRouter();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const toggleConfirmationPasswordVisibility = () => {
+    setShowConfirmationPassword(!showConfirmationPassword);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     //パスワードと確認用パスワードが合っているかどうかを確認
     if (password !== passwordConfirmation) {
-      window.alert("パスワードと確認用パスワードが異なっています");
+      error("パスワードと確認用パスワードが異なっています");
     } else {
       try {
         //新規登録を行うAPIを叩く
@@ -31,9 +44,17 @@ const Signup = () => {
         });
         //   ログインページに飛ばす
         router.push("/login");
-      } catch (err) {
+
+        // しょうがなくanyを使う泣
+      } catch (err: any) {
         console.log(err);
-        alert("入力内容が正しくありません。");
+        if (err.response.data.emailErorr) {
+          // サーバーからのエラーレスポンスにemailErorrが含まれている場合
+          error(err.response.data.emailErorr);
+        } else {
+          // それ以外のエラーの場合
+          error("入力内容が正しくありません。");
+        }
       }
     }
   };
@@ -88,24 +109,31 @@ const Signup = () => {
                   }}
                 />
               </div>
-              <div>
+              <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   autoComplete="current-password"
-                  className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-4 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                  className="block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-4 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   required
                   minLength={6}
                   placeholder="パスワード"
                   value={password}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={(e) => {
                     setPassword(e.target.value);
                   }}
                 />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-4 flex items-center px-2 cursor-pointer"
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </button>
               </div>
-              <div>
+              <div className="relative">
                 <input
-                  type="password"
+                  type={showConfirmationPassword ? "text" : "password"}
                   name="confirmationーpassword"
                   autoComplete="current-password"
                   className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-4 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -117,6 +145,13 @@ const Signup = () => {
                     setPasswordConfirmation(e.target.value);
                   }}
                 />
+                <button
+                  type="button"
+                  onClick={toggleConfirmationPasswordVisibility}
+                  className="absolute inset-y-0 right-4 flex items-center px-2 cursor-pointer"
+                >
+                  {showConfirmationPassword ? <FaEye /> : <FaEyeSlash />}
+                </button>
               </div>
             </div>
             <button
@@ -148,6 +183,7 @@ const Signup = () => {
           </form>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

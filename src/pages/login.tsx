@@ -7,14 +7,20 @@ import Link from "next/link";
 import { RiShieldKeyholeFill } from "react-icons/ri";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import FormLeftContent from "../components/FormLeftContent ";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const router = useRouter();
 
   const { login } = useAuth();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,20 +75,27 @@ const Login = () => {
                   }}
                 />
               </div>
-              <div>
+              <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   autoComplete="current-password"
+                  className="block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-4 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   required
-                  className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-4 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   minLength={6}
                   placeholder="パスワード"
                   value={password}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={(e) => {
                     setPassword(e.target.value);
                   }}
                 />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-4 flex items-center px-2 cursor-pointer"
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </button>
               </div>
             </div>
             <button
@@ -97,9 +110,9 @@ const Login = () => {
               </span>
               ログイン
             </button>
-            <span className="text-center text-gray-500 text-xs hover:bg-gray-200 w-max p-2 mx-auto">
+            {/* <span className="text-center text-gray-500 text-xs hover:bg-gray-200 w-max p-2 mx-auto">
               パスワードを忘れた方へ
-            </span>
+            </span> */}
             <Link href="/signup" className="flex items-center justify-center">
               <button
                 type="submit"
