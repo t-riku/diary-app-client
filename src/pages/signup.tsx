@@ -60,10 +60,7 @@ const Signup = () => {
   };
 
   return (
-    <div
-      style={{ height: "92vh" }}
-      className="w-screen h-screen bg-cover bg-[url('https://tailwindcss.com/_next/static/media/hero@75.b2469a49.jpg')] flex items-center justify-center"
-    >
+    <div className="w-screen h-screen bg-cover bg-[url('https://tailwindcss.com/_next/static/media/hero@75.b2469a49.jpg')] flex items-center justify-center">
       <Head>
         <title>新規登録</title>
       </Head>

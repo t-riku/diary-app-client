@@ -17,7 +17,7 @@ const question = () => {
       <main className="container mx-auto py-4">
         <div className="flex flex-col items-center">
           <div className="w-full">
-            <Tabs className="bg-white rounded-md">
+            <Tabs className="bg-white rounded-md m-8">
               <TabList className="flex flex-col sm:flex-row">
                 <Tab className="text-gray-600 py-4 px-6  hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500 flex items-center gap-1">
                   <FaPencilAlt />
@@ -100,18 +100,40 @@ const question = () => {
                 </div>
               </TabPanel>
               <TabPanel>
+                {/* カレンダー */}
                 <div className="px-10 pt-4">
-                  <h1>カレンダーの使い方です</h1>
+                  <Description
+                    type="Summary"
+                    text={`日記作成ページでこのページでは主に日記の作成をすることができます。
+                    ボタンとしてはテキストエリアに入力した作って欲しい日記の内容をOpen AI APIに送り、
+                    日記を作成してもらう「作成」ボタン。実際に日記をDBに保存して日記の一覧で見ることができる様になる
+                    「保存」ボタン。作ってもらった日記の候補を削除し、押すだけで簡単にリセットできる「リセット」ボタン。
+                    日記をどんなふうに作ってもらうかを指定できる「設定」のアイコンがあり、日記作成ページでも
+                    日記を表示して、自分が保存した日記をすぐに確認できるようにしています。`}
+                  />
                 </div>
               </TabPanel>
               <TabPanel>
+                {/* プロフィール */}
                 <div className="px-10 pt-4">
-                  <h1>プロフィールの使い方です</h1>
+                  <Description
+                    type="Summary"
+                    text={`日記作成ページでこのページでは主に日記の作成をすることができます。
+                    ボタンとしてはテキストエリアに入力した作って欲しい日記の内容をOpen AI APIに送り、
+                    日記を作成してもらう「作成」ボタン。実際に日記をDBに保存して日記の一覧で見ることができる様になる
+                    「保存」ボタン。作ってもらった日記の候補を削除し、押すだけで簡単にリセットできる「リセット」ボタン。`}
+                  />
                 </div>
               </TabPanel>
               <TabPanel>
+                {/* 設定 */}
                 <div className="px-10 pt-4">
-                  <h1>設定の使い方です</h1>
+                  <Description
+                    type="Summary"
+                    text={`日記作成ページでこのページでは主に日記の作成をすることができます。
+                    ボタンとしてはテキストエリアに入力した作って欲しい日記の内容をOpen AI APIに送り、
+                    日記を作成してもらう「作成」ボタン。実際に日記をDBに保存して日記の一覧で見ることができる様になる`}
+                  />
                 </div>
               </TabPanel>
             </Tabs>

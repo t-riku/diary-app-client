@@ -145,8 +145,7 @@ const Setting = () => {
       <main className="container mx-auto py-4">
         <div className="flex flex-col items-center">
           <div className="w-full">
-            {/* <div className="my-10 mx-auto "> */}
-            <Tabs className="bg-white rounded-md">
+            <Tabs className="bg-white rounded-md m-8">
               <TabList className="flex flex-col sm:flex-row">
                 <Tab className="text-gray-600 py-4 px-6  hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500 flex items-center gap-1">
                   公開
