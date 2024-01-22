@@ -7,6 +7,7 @@ interface Props {
   text?: string;
   imageUrl?: StaticImageData;
   type?: "Summary" | "Supplemental";
+  height?: number;
 }
 
 const Description: React.FC<Props> = ({
@@ -15,6 +16,7 @@ const Description: React.FC<Props> = ({
   text,
   imageUrl,
   type,
+  height = 25,
 }) => {
   return (
     <div className="py-4">
@@ -44,7 +46,9 @@ const Description: React.FC<Props> = ({
       )}
       {text && <p className="mb-1">{insertBreaks(text)}</p>}
       {imageUrl && (
-        <div className="relative w-4/5 h-80 mt-3">
+        <div
+          className={`relative w-full max-h-[${height}rem] h-[${height}rem] mt-3`}
+        >
           <Image
             className="object-cover w-full h-full rounded-md"
             src={imageUrl}

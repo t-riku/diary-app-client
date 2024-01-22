@@ -146,16 +146,16 @@ const Setting = () => {
         <div className="flex flex-col items-center">
           <div className="w-full">
             <Tabs className="bg-white rounded-md m-8">
-              <TabList className="flex flex-col sm:flex-row">
+              {/* <TabList className="flex flex-col sm:flex-row">
                 <Tab className="text-gray-600 py-4 px-6  hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500 flex items-center gap-1">
                   公開
                 </Tab>
                 <Tab className="text-gray-600 py-4 px-6 hover:text-blue-500 focus:outline-none flex items-center gap-1">
                   形式
                 </Tab>
-              </TabList>
+              </TabList> */}
 
-              <TabPanel>
+              {/* <TabPanel>
                 <div className="p-10">
                   <h1 className="text-2xl font-bold mb-4">ユーザーの設定</h1>
                   <div className="flex justify-between items-center">
@@ -168,7 +168,7 @@ const Setting = () => {
                     </div>
                   </div>
                 </div>
-              </TabPanel>
+              </TabPanel> */}
 
               <TabPanel>
                 <div className="p-10">

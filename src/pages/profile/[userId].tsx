@@ -7,6 +7,8 @@ import styles from "../../styles/Timeline.module.css";
 import { GrPowerReset } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import { SendImageForm } from "../../components/SendImageForm";
+import { success, error } from "../../context/hotToast";
+import { Toaster } from "react-hot-toast";
 
 type Props = {
   profile: Profile;
@@ -82,6 +84,14 @@ const UserProfile = ({ profile, posts }: Props) => {
   };
 
   const handleEditProfile = async () => {
+    const changeUsername = username !== profile.user.username;
+    const changeBio = bio !== profile.bio;
+
+    if (!changeUsername && !changeBio) {
+      error("プロフィール情報に変更がありません。");
+      return;
+    }
+
     setIsEditLoading(true);
     try {
       await apiClient.post(`/users/profile/edit/${profile.userId}`, {
@@ -89,6 +99,7 @@ const UserProfile = ({ profile, posts }: Props) => {
         username,
         bio,
       });
+      success("プロフィールを更新しました。再リロードしてください。");
       setIsEditLoading(false);
       setEditModalIsOpen(false);
     } catch (err) {
@@ -145,7 +156,7 @@ const UserProfile = ({ profile, posts }: Props) => {
                       プロフィールの編集
                     </h1>
 
-                    <SendImageForm />
+                    {/* <SendImageForm /> */}
 
                     <label
                       htmlFor="username"
@@ -269,6 +280,7 @@ const UserProfile = ({ profile, posts }: Props) => {
           </div>
         ))}
       </div>
+      <Toaster />
     </div>
   );
 };

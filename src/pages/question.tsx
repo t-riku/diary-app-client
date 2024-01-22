@@ -7,6 +7,12 @@ import { FaPencilAlt } from "react-icons/fa";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import createDiaryImg01 from "../../public/assets/question/createDiary/01.png";
+import createDiaryImg02 from "../../public/assets/question/createDiary/02.png";
+import createDiaryImg03 from "../../public/assets/question/createDiary/03.png";
+import createDiaryImg04 from "../../public/assets/question/createDiary/04.png";
+import createDiaryExampleImg01 from "../../public/assets/question/createDiary/example_01.png";
+import createDiaryExampleImg02 from "../../public/assets/question/createDiary/example_01.png";
+import createDiaryExampleImg03 from "../../public/assets/question/createDiary/example_01.png";
 
 import "react-tabs/style/react-tabs.css";
 import Description from "../components/common/Description";
@@ -19,23 +25,23 @@ const question = () => {
           <div className="w-full">
             <Tabs className="bg-white rounded-md m-8">
               <TabList className="flex flex-col sm:flex-row">
-                <Tab className="text-gray-600 py-4 px-6  hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500 flex items-center gap-1">
+                <Tab className="text-gray-600   py-4 px-6  hover:text-blue-500 focus:outline-none focus:text-blue-500 focus:border-b-2 font-medium focus:border-blue-500 flex items-center gap-1">
                   <FaPencilAlt />
                   日記作成
                 </Tab>
-                <Tab className="text-gray-600 py-4 px-6 hover:text-blue-500 focus:outline-none flex items-center gap-1">
+                <Tab className="text-gray-600 py-4 px-6  hover:text-blue-500 focus:outline-none focus:text-blue-500 focus:border-b-2 font-medium focus:border-blue-500 flex items-center gap-1">
                   <MdLibraryBooks />
                   日記一覧
                 </Tab>
-                <Tab className="text-gray-600 py-4 px-6 hover:text-blue-500 focus:outline-none flex items-center gap-1">
+                <Tab className="text-gray-600 py-4 px-6  hover:text-blue-500 focus:outline-none focus:text-blue-500 focus:border-b-2 font-medium focus:border-blue-500 flex items-center gap-1">
                   <FaRegCalendarAlt />
                   カレンダー
                 </Tab>
-                <Tab className="text-gray-600 py-4 px-6 hover:text-blue-500 focus:outline-none flex items-center gap-1">
+                <Tab className="text-gray-600 py-4 px-6  hover:text-blue-500 focus:outline-none focus:text-blue-500 focus:border-b-2 font-medium focus:border-blue-500 flex items-center gap-1">
                   <IoMdPerson />
                   プロフィール
                 </Tab>
-                <Tab className="text-gray-600 py-4 px-6 hover:text-blue-500 focus:outline-none flex items-center gap-1">
+                <Tab className="text-gray-600 py-4 px-6  hover:text-blue-500 focus:outline-none focus:text-blue-500 focus:border-b-2 font-medium focus:border-blue-500 flex items-center gap-1">
                   <IoIosSettings />
                   設定
                 </Tab>
@@ -62,17 +68,17 @@ const question = () => {
                   <Description
                     stepNumber={2}
                     text={`するとAIが日記を作成してくれます。`}
-                    imageUrl={createDiaryImg01}
+                    imageUrl={createDiaryImg02}
                   />
                   <Description
                     stepNumber={3}
                     text={`送信ボタンをクリックして日記を送信してみましょう。`}
-                    imageUrl={createDiaryImg01}
+                    imageUrl={createDiaryImg03}
                   />
                   <Description
                     stepNumber={4}
                     text={`すると日記が保存され、下にスクロールするか日記一覧ページで保存した日記を確認することができます。`}
-                    imageUrl={createDiaryImg01}
+                    imageUrl={createDiaryImg04}
                   />
                   <Description
                     type="Supplemental"
@@ -80,6 +86,17 @@ const question = () => {
                   />
                   <Description
                     exampleNumber={1}
+                    text={`文字数：400 口調：子供っぽく 文字の形式：絵文字たくさん 日記の形式：「日記：〜〜〜」の形 気分・感情：元気に トピック：今日の出来事で作った日記。`}
+                    imageUrl={createDiaryExampleImg01}
+                    // height={40}
+                  />
+                  <Description
+                    exampleNumber={2}
+                    text={`文字数：400 口調：絵文字多めにで作った日記。`}
+                    imageUrl={createDiaryImg01}
+                  />
+                  <Description
+                    exampleNumber={3}
                     text={`文字数：400 口調：絵文字多めにで作った日記。`}
                     imageUrl={createDiaryImg01}
                   />
